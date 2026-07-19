@@ -110,6 +110,10 @@ export default function NoteForm({ onClose }: NoteFormProps) {
               <option value="Work">Work</option>
 
               <option value="Personal">Personal</option>
+
+              <option value="Meeting">Meeting</option>
+
+              <option value="Shopping">Shopping</option>
             </Field>
 
             <ErrorMessage name="tag" component="span" className={css.error} />

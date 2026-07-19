@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { useDebouncedCallback } from "use-debounce";
 import { useRouter, useSearchParams } from "next/navigation";
 import { fetchNotes } from "../../lib/api";
 import SearchBox from "../../components/SearchBox/SearchBox";
@@ -26,9 +27,9 @@ export default function NotesClient() {
     placeholderData: keepPreviousData,
   });
 
-  const handleSearch = (value: string) => {
+  const handleSearch = useDebouncedCallback((value: string) => {
     router.push(`/notes?search=${encodeURIComponent(value)}&page=1`);
-  };
+  }, 500);
 
   const handlePageChange = (newPage: number) => {
     router.push(`/notes?page=${newPage}&search=${encodeURIComponent(search)}`);
