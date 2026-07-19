@@ -36,7 +36,9 @@ const NoteFormSchema = Yup.object({
 
   content: Yup.string().max(500, "Content must be at most 500 characters"),
 
-  tag: Yup.string().required("Tag is required"),
+  tag: Yup.string()
+    .oneOf(["Todo", "Work", "Personal", "Meeting", "Shopping"], "Invalid tag")
+    .required("Tag is required"),
 });
 
 export default function NoteForm({ onClose }: NoteFormProps) {

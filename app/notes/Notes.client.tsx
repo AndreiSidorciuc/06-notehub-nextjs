@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
 import { fetchNotes } from "../../lib/api";
 import SearchBox from "../../components/SearchBox/SearchBox";
@@ -19,10 +19,11 @@ export default function NotesClient() {
   const page = Number(params.get("page") ?? 1);
   const search = params.get("search") ?? "";
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, isError, isPlaceholderData } = useQuery({
     queryKey: ["notes", page, search],
     queryFn: () => fetchNotes({ page, search }),
     refetchOnMount: false,
+    placeholderData: keepPreviousData,
   });
 
   const handleSearch = (value: string) => {
@@ -65,7 +66,9 @@ export default function NotesClient() {
       )}
 
       {data?.notes && data.notes.length > 0 ? (
-        <NoteList notes={data.notes} />
+        <div style={{ opacity: isPlaceholderData ? 0.6 : 1 }}>
+          <NoteList notes={data.notes} />
+        </div>
       ) : (
         <p>No notes found.</p>
       )}
